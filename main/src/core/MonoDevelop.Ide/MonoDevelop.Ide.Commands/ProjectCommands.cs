@@ -464,8 +464,11 @@ namespace MonoDevelop.Ide.Commands
 		protected override void Update (CommandInfo info)
 		{
 			// FIXME: Once we fix Workspaces to offer Visual Studio formats (instead of the deprecated MonoDevelop 1.0 format), we can allow exporting of Workspaces as well.
-			if (!(IdeApp.ProjectOperations.CurrentSelectedItem is Solution) && !(IdeApp.ProjectOperations.CurrentSelectedItem is SolutionItem))
-				info.Enabled = false;
+			if (IdeApp.ProjectOperations.CurrentSelectedItem is DotNetProject prj) {
+				info.Enabled = prj.MSBuildProject.GetReferencedSDKs ().Length == 0;
+			} else {
+				info.Enabled = IdeApp.ProjectOperations.CurrentSelectedItem is Solution || IdeApp.ProjectOperations.CurrentSelectedItem is SolutionItem;
+			}
 		}
 
 		protected override void Run ()
