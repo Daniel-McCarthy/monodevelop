@@ -43,11 +43,13 @@ namespace MonoDevelop.Ide.Projects
 		{
 			this.Build();
 			
-			labelNewFormat.Text = selectedFormat?.ProductDescription ?? item.FileFormat.Name;
+			labelNewFormat.Text = selectedFormat?.ProductDescription ?? item.FileFormat.ProductDescription;
 			
 			formats = MSBuildFileFormat.GetSupportedFormats (item).ToArray ();
 			foreach (var format in formats) {
-				comboFormat.AppendText (format.ProductDescription);
+				if (format.ProductDescription != item.FileFormat.ProductDescription) {
+					comboFormat.AppendText (format.ProductDescription);
+				}
 			}
 
 			int sel = Array.IndexOf (formats, selectedFormat);
